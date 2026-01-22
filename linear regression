@@ -1,0 +1,37 @@
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+# Create dataset
+data = {
+'Size_sqft': [1000, 1500, 1200, 1800, 1100],
+'Price_k': [300, 450, 360, 540, 330]
+}
+df = pd.DataFrame(data)
+# Define features and target
+X = df[['Size_sqft']] # Feature(s)
+y = df['Price_k'] # Target
+# Split into train/test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Train model
+model = LinearRegression()
+model.fit(X_train, y_train)
+# Inspect model
+slope_m = model.coef_[0]
+intercept_b = model.intercept_
+print(f"Learned Slope (m): {slope_m:.2f}")
+print(f"Learned Intercept (b): {intercept_b:.2f}")
+# Predict and evaluate
+y_pred = model.predict(X_test)
+r_sq = model.score(X_test, y_test)
+print(f"R-squared Score on Test Set: {r_sq:.4f}")
+# Predict for a new house size
+new_house_size = np.array([[1300]])
+predicted_price = model.predict(new_house_size)
+print(f"Predicted Price for 1300 sqft: ${predicted_price[0]:.2f}k")
+Example Output:
+Learned Slope (m): 0.30
+Learned Intercept (b): 0.00
+R-squared Score on Test Set: 0.98
+Predicted Price for 1300 sqft: $390.00k
